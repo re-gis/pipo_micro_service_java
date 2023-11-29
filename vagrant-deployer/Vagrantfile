@@ -1,0 +1,49 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  nodes = { :qa => {'hostname': 'bippo-qa', 'env': 'qa'},}
+
+  nodes.each do |node, nodeParams|
+    config.vm.define node do |node|
+      node.vm.box = "dummy"
+      node.vm.box_url = "https://github.com/mitchellh/vagrant-aws/raw/master/dummy.box"
+
+      node.vm.provider :aws do |aws, override|
+        aws.access_key_id = "AKIAJXKKZQDH24BLRQ2A"
+        aws.secret_access_key = "dSXC1oOQbYJpoA8+2HS1ldcnuj54Oaa5/0uhu7M3"
+        aws.keypair_name = "development-key-us-east-1"
+
+        aws.ami = "ami-fce3c696"
+        aws.instance_type = "t2.small"
+        #aws.security_groups = ['webapp-sg']
+        aws.subnet_id = 'subnet-4817af3e'
+
+        aws.tags = {
+          'Name' => nodeParams["hostname"]
+        }
+
+        aws.associate_public_ip = true
+
+        override.ssh.username = "ubuntu"
+        override.ssh.private_key_path = "./development-key-us-east-1.pem"
+      end
+
+      node.vm.provision "shell", :path => "puppet_standalone.sh"
+      node.vm.provision "shell", :path => "puppet_r10k.sh"
+
+      node.vm.provision "puppet" do |puppet|
+        puppet.manifests_path = "puppet/manifests"
+        puppet.manifest_file  = "default"
+        puppet.module_path    = "puppet/modules"
+        puppet.facter = {
+          "env" => nodeParams["env"]
+        }
+      end
+    end
+  end
+end

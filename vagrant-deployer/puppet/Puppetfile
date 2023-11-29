@@ -1,0 +1,20 @@
+#!/usr/bin/env ruby
+#^syntax declaration
+
+moduledir '/etc/puppet/modules'
+forge "https://forgeapi.puppetlabs.com"
+
+
+mod 'puppetlabs/stdlib'
+mod 'puppetlabs/pe_gem'
+mod 'puppet/archive',
+  :git => 'https://github.com/voxpupuli/puppet-archive.git',
+  :tag => 'v0.5.1'
+
+mod "gnandiga/jdk_oracle",
+  :git => 'https://github.com/gnandiga/puppet-jdk_oracle.git',
+  :ref => 'master'
+
+mod 'puppetlabs/apt'
+mod 'puppetlabs/concat'
+mod 'jfryman/nginx'

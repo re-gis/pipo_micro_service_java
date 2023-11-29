@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true">
+    <contextName>dag</contextName>
+    <jmxConfigurator/>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--Daily rolling file appender -->
+    <appender name="rollingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${catalina.base}/logs/dag.log</file>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd'T'HH:mm:ss.SSS} [%mdc{username}] [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+        <prudent>false</prudent>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${catalina.base}/logs/dag.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!-- keep 30 days' worth of history -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <logger name="com.manning" level="DEBUG"/>
+
+    <logger name="org.hibernate" level="WARN"/>
+    <!--<logger name="org.hibernate.type" level="TRACE"/>-->
+
+    <logger name="org.springframework" level="WARN"/>
+
+    <root level="WARN">
+        <!-- 
+        We do not want the log output to endup in catalina.out because this file cannot be rotated.
+        Therefore, we have commented out this appender. 
+        DO NOT ENABLE this appender. 
+        -->
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="rollingFileAppender"/>
+    </root>
+
+</configuration>

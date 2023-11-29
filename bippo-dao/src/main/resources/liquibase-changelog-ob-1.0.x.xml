@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="add-onboard_informatics_response" author="gnandigam">
+        <createTable tableName="onboard_informatics_response">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ntreis_id" type="int">
+                <constraints nullable="false" foreignKeyName="onboard_informatics_response-ntreis-fk" referencedColumnNames="id" referencedTableName="ntreis"/>
+            </column>
+            <column name="response" type="text"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-onboard_informatics_area_response" author="gideon">
+        <createTable tableName="onboard_informatics_area_response">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="area_code" type="varchar(16)">
+                <constraints unique="true"/>
+            </column>
+            <column name="response" type="text"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update-onboard_informatics_area_response" author="gideon">
+        <dropNotNullConstraint tableName="onboard_informatics_area_response" columnName="updated" columnDataType="timestamp"/>
+    </changeSet>
+
+    <changeSet id="add-onboard_informatics_poi_response" author="gideon">
+        <createTable tableName="onboard_informatics_poi_response">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="address" type="varchar(16)">
+                <constraints unique="true"/>
+            </column>
+            <column name="response" type="text"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-onboard_informatics_analytics_response" author="gideon">
+        <createTable tableName="onboard_informatics_analytics_response">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="zip" type="int">
+                <constraints unique="true"/>
+            </column>
+            <column name="year" type="smallint"/>
+            <column name="quarter" type="tinyint"/>
+            <column name="price" type="int"/>
+            <column name="count" type="int"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="onboard_informatics_analytics_response" columnNames="zip, year, quarter" constraintName="zip-year-quarter-uk"/>
+    </changeSet>
+
+    <changeSet id="add-realty_trac_auction" author="gideon">
+        <createTable tableName="realty_trac_auction">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="RTPropertyUniqueIdentifer" type="int"/>
+            <column name="SitusAddress" type="varchar(150)"/>
+            <column name="SitusCity" type="varchar(50)"/>
+            <column name="SitusState" type="varchar(2)"/>
+            <column name="SitusZip" type="varchar(5)"/>
+            <column name="SitusCounty" type="varchar(50)"/>
+            <column name="SitusFIPS" type="varchar(5)"/>
+            <column name="Longitude" type="float(18)"/>
+            <column name="Latitude" type="float(18)"/>
+            <column name="APN" type="varchar(50)"/>
+            <column name="Tax_Bill_MailingAddress" type="varchar(100)"/>
+            <column name="Tax_Bill_MailingCity" type="varchar(50)"/>
+            <column name="Tax_Bill_MailingState" type="char(2)"/>
+            <column name="Tax_Bill_MailingZip" type="varchar(5)"/>
+            <column name="Tax_Bill_MailingZip4" type="varchar(4)"/>
+            <column name="Tax_Bill_MailingCounty" type="varchar(50)"/>
+            <column name="Tax_Bill_MailingFIPs" type="varchar(5)"/>
+            <column name="NCOA_MailingAddress" type="varchar(100)"/>
+            <column name="NCOA_MailingCity" type="varchar(50)"/>
+            <column name="NCOA_MailingState" type="char(2)"/>
+            <column name="NCOA_MailingZip" type="varchar(5)"/>
+            <column name="NCOA_MailingZip4" type="varchar(4)"/>
+            <column name="NCOA_MailingCounty" type="varchar(50)"/>
+            <column name="NCOA_MailingFIPs" type="varchar(5)"/>
+            <column name="PropertyGroup" type="varchar(50)"/>
+            <column name="PropertyType" type="varchar(100)"/>
+            <column name="Property_Zoning" type="varchar(50)"/>
+            <column name="Bedrooms" type="smallint(2)"/>
+            <column name="Bathrooms" type="decimal(9,3)"/>
+            <column name="SquareFootage" type="int"/>
+            <column name="LotSize" type="real"/>
+            <column name="YearBuilt" type="smallint"/>
+            <column name="Effective_Year_Built" type="smallint"/>
+            <column name="EnteredDate" type="date"/>
+            <column name="RTUniqueFCIdentifier" type="int"/>
+            <column name="RecordType" type="varchar(3)"/>
+            <column name="BorrowersName_Owner" type="varchar(100)"/>
+            <column name="LenderName" type="varchar(200)"/>
+            <column name="LenderAddress" type="varchar(100)"/>
+            <column name="LenderCity" type="varchar(50)"/>
+            <column name="LenderState" type="varchar(2)"/>
+            <column name="LenderZip" type="varchar(10)"/>
+            <column name="LenderPhone" type="varchar(50)"/>
+            <column name="CleanLenderName" type="varchar(500)"/>
+            <column name="ParentLenderName" type="varchar(250)"/>
+            <column name="MergerParentName" type="varchar(250)"/>
+            <column name="ServicerName" type="varchar(100)"/>
+            <column name="ServicerAddress" type="varchar(100)"/>
+            <column name="ServicerCity" type="varchar(50)"/>
+            <column name="ServicerPhone" type="varchar(25)"/>
+            <column name="ServicerState" type="varchar(25)"/>
+            <column name="ServicerZip" type="varchar(25)"/>
+            <column name="TrusteeName" type="varchar(100)"/>
+            <column name="TrusteeAddress" type="varchar(100)"/>
+            <column name="TrusteeCity" type="varchar(20)"/>
+            <column name="TrusteeState" type="varchar(2)"/>
+            <column name="TrusteeZip" type="varchar(15)"/>
+            <column name="TrusteePhone" type="varchar(20)"/>
+            <column name="FCDocRecordingDate" type="date"/>
+            <column name="FCDocInstrumentNumber" type="varchar(50)"/>
+            <column name="FCDocBookPage" type="varchar(50)"/>
+            <column name="FCDocInstrumentDate" type="date"/>
+            <column name="RelatedDocumentInstrumentNumber" type="varchar(50)"/>
+            <column name="RelatedDocDocumentBookPage" type="varchar(15)"/>
+            <column name="RelatedDocumentRecordingDate" type="varchar(20)"/>
+            <column name="RecordedAuctionDate" type="date"/>
+            <column name="RecordedOpeningBid" type="decimal(11,2)"/>
+            <column name="PublicationDate" type="date"/>
+            <column name="CaseNumber" type="varchar(25)"/>
+            <column name="TrusteeReferenceNumber" type="varchar(20)"/>
+            <column name="Payment" type="decimal(11,2)"/>
+            <column name="LoanNumber" type="varchar(25)"/>
+            <column name="LoanMaturityDate" type="date"/>
+            <column name="DefaultAmount" type="decimal(11,2)"/>
+            <column name="OriginalLoanAmount" type="decimal(11,2)"/>
+            <column name="PenaltyInterest" type="decimal(11,2)"/>
+            <column name="LoanBalance" type="decimal(11,2)"/>
+            <column name="InterestRate" type="decimal(5,3)"/>
+            <column name="JudgementDate" type="date"/>
+            <column name="JudgmentAmount" type="decimal(11,2)"/>
+            <column name="AuctionCourthouse" type="varchar(50)"/>
+            <column name="AuctionAddress" type="varchar(300)"/>
+            <column name="AuctionCityState" type="varchar(55)"/>
+            <column name="AuctionTime" type="varchar(20)"/>
+            <column name="ProcessIndicator" type="char(1)"/>
+            <column name="EstimatedValue" type="decimal(11,2)"/>
+        </createTable>
+        <createIndex tableName="realty_trac_auction" indexName="SitusAddress_INDEX" unique="false">
+            <column name="SitusAddress" type="varchar(150)"/>
+        </createIndex>
+        <createIndex tableName="realty_trac_auction" indexName="SitusCounty_INDEX" unique="false">
+            <column name="SitusCounty" type="varchar(50)"/>
+        </createIndex>
+        <createIndex tableName="realty_trac_auction" indexName="SitusState_INDEX" unique="false">
+            <column name="SitusState" type="varchar(2)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-realty_trac_auction-auction-date-index" author="gideon">
+        <createIndex tableName="realty_trac_auction" indexName="RecordedAuctionDate_INDEX" unique="false">
+            <column name="RecordedAuctionDate" type="date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-realty_trac_auction-address-semantics-column" author="gideon">
+        <addColumn tableName="realty_trac_auction">
+            <column name="semantics_id" type="int"/>
+        </addColumn>
+        <createIndex tableName="realty_trac_auction" indexName="semantics_id_INDEX" unique="false">
+            <column name="semantics_id" type="date"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-onboard_informatics_mortgage_owner_response" author="gideon">
+        <createTable tableName="onboard_informatics_mortgage_owner_response">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="attom_id" type="int(11)">
+                <constraints unique="true"/>
+            </column>
+            <column name="response" type="text"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>

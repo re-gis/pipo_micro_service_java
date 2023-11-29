@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.manning.bippo</groupId>
+    <artifactId>bippo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>bippo</name>
+    <description>BIPPO Parent</description>
+
+    <scm>
+        <connection>scm:git:git://bitbucket.org/bippo-central/bippo-central.git</connection>
+    </scm>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.1.RELEASE</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version>1.8</java.version>
+        <hibernate.version>5.0.9.Final</hibernate.version>
+        <spring-cloud.version>Dalston.SR2</spring-cloud.version>
+
+        <docker.maven.plugin.version>0.4.11</docker.maven.plugin.version>
+        <docker.image.prefix>bippo</docker.image.prefix>
+        <docker.registry.host>registry.homeinvestortool.com:5000</docker.registry.host>
+        <spring.data.redis.version>1.8.0.RELEASE</spring.data.redis.version>
+        <mysql.version>6.0.6</mysql.version>
+    </properties>
+
+    <modules>
+        <module>bippo-api</module>
+        <module>bippo-data-aggregator</module>
+        <module>bippo-smartystreets-service</module>
+        <module>bippo-services</module>
+        <module>bippo-dao</module>
+        <module>bippo-commons</module>
+        <module>bippo-onboard-informatics-service</module>
+        <module>bippo-dag-cron</module>
+        <module>bippo-dag-rets</module>
+        <module>bippo-redis-dao</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>buildnumber-maven-plugin</artifactId>
+                <version>1.4</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>create</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <doCheck>false</doCheck>
+                    <doUpdate>false</doUpdate>
+                    <shortRevisionLength>7</shortRevisionLength>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>2.1.0</version>
+                <!--<configuration>-->
+                    <!--<failBuildOnCVSS>8</failBuildOnCVSS>-->
+                <!--</configuration>-->
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+                <version>3.6</version>
+                <configuration>
+                    <reportPlugins>
+                        <plugin>
+                            <groupId>org.owasp</groupId>
+                            <artifactId>dependency-check-maven</artifactId>
+                            <version>2.1.0</version>
+                            <configuration>
+                                <cveValidForHours>12</cveValidForHours>
+                                <!--<failBuildOnCVSS>8</failBuildOnCVSS>-->
+                            </configuration>
+                            <reportSets>
+                                <reportSet>
+                                    <reports>
+                                        <report>aggregate</report>
+                                    </reports>
+                                </reportSet>
+                            </reportSets>
+                        </plugin>
+                    </reportPlugins>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <repositories>
+        <repository>
+            <id>spring-milestones</id>
+            <name>Spring Milestones</name>
+            <url>https://repo.spring.io/libs-milestone</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+</project>

@@ -1,0 +1,21 @@
+{
+  "kind": "Service",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "bippo-dag-service"
+  },
+  "spec": {
+    "selector": {
+      "app": "bippo-dag"
+    },
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 80,
+        "targetPort": 8080
+      }
+    ],
+    "type": "LoadBalancer"
+
+  }
+}

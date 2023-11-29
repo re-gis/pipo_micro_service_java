@@ -1,0 +1,64 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.manning.bippo.deployer</groupId>
+    <artifactId>deployer</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>deployer</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bippo.version>0.0.1-SNAPSHOT</bippo.version>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.10</version>
+                <executions>
+                    <execution>
+                        <id>copy</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>com.manning.bippo</groupId>
+                                    <artifactId>bippo-web</artifactId>
+                                    <version>${bippo.version}</version>
+                                    <type>war</type>
+                                    <outputDirectory>target</outputDirectory>
+                                    <destFileName>web.war</destFileName>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>com.manning.bippo</groupId>
+                                    <artifactId>bippo-api</artifactId>
+                                    <version>${bippo.version}</version>
+                                    <type>war</type>
+                                    <outputDirectory>target</outputDirectory>
+                                    <destFileName>api.war</destFileName>
+                                </artifactItem>
+
+                                <artifactItem>
+                                    <groupId>com.manning.bippo</groupId>
+                                    <artifactId>bippo-data-aggregator</artifactId>
+                                    <version>${bippo.version}</version>
+                                    <type>war</type>
+                                    <outputDirectory>target</outputDirectory>
+                                    <destFileName>dag.war</destFileName>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

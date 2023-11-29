@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="drop-ntries-id-fk" author="gnandigam" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="geo_spatial_property" constraintName="geo_spatial_property-ntreis-fk"/>
+    </changeSet>
+    <changeSet id="drop-ntries-id-fk_2" author="gnandigam" failOnError="false">
+        <dropForeignKeyConstraint baseTableName="ntreis_photo" constraintName="ntreis_photo-ntreis-fk"/>
+    </changeSet>
+
+    <!--<changeSet id="modify-ntries-id-data-type" author="gnandigam">-->
+        <!--<modifyDataType tableName="geo_spatial_property" columnName="ntreis_id" newDataType="int"/>-->
+        <!--<modifyDataType tableName="ntreis_photo" columnName="ntreis_id" newDataType="int"/>-->
+        <!--<modifyDataType tableName="ntreis" columnName="id" newDataType="int"/>-->
+    <!--</changeSet>-->
+
+    <changeSet id="add-ntries-id-fk" author="gnandigam">
+        <addForeignKeyConstraint baseTableName="geo_spatial_property" baseColumnNames="ntreis_id"
+                                 constraintName="geo_spatial_property-ntreis-fk"
+                                 referencedTableName="ntreis"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="ntreis_photo" baseColumnNames="ntreis_id"
+                                 constraintName="ntreis_photo-ntreis-fk"
+                                 referencedTableName="ntreis"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-bpo-table" author="gnandigam">
+        <createTable tableName="bpo">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="subject_id" type="int">
+                <constraints foreignKeyName="bpo_subject-ntreis_id-fk" referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="bpo_sold_comps">
+            <column name="id" type="int" autoIncrement="false">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="ntreis_id" type="int">
+                <constraints foreignKeyName="bpo_sold_comps_id-ntries_id-fk" referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-dates-to-bpo" author="gnandigam">
+        <addColumn tableName="bpo">
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-adjustment-to-bpo-sold-comp" author="gnandigam">
+        <addColumn tableName="bpo_sold_comps">
+            <column name="bpo_id" type="int">
+                <constraints foreignKeyName="bpo-bpo_sold_comps_id-fk" referencedTableName="bpo" referencedColumnNames="id"/>
+            </column>
+            <column name="adjustment" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-auto-increment-bpo-sold-comps" author="gnadnigam">
+        <addAutoIncrement tableName="bpo_sold_comps" columnName="id"
+                        columnDataType="int"/>
+    </changeSet>
+</databaseChangeLog>

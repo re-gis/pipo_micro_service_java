@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="add-address-semantics-ntreis-fk" author="gnandigam">
+        <addForeignKeyConstraint baseTableName="address_semantics"
+                                 baseColumnNames="ntreis_id"
+                                 constraintName="address-semantics-ntreis-fk"
+                                 referencedTableName="ntreis"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-address-semantics-tax-fk" author="gnandigam">
+        <addForeignKeyConstraint baseTableName="address_semantics"
+                                 baseColumnNames="tax_id"
+                                 constraintName="address_semantics-onboard_informatics_response-fk"
+                                 referencedTableName="onboard_informatics_response"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="add-address_semantics-auctions-fk" author="gnandigam">
+        <addColumn tableName="address_semantics">
+            <column name="auction_id" type="int">
+                <constraints foreignKeyName="address_semantics-auctions-fk" referencedTableName="auctions" referencedColumnNames="id"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="nullable-ntreis_id-onboard_informatics_response" author="gnandigam">
+        <dropNotNullConstraint tableName="onboard_informatics_response" columnName="ntreis_id" columnDataType="int"/>
+    </changeSet>
+    
+    <changeSet id="add-subject_address_semantics_id-fk" author="gnandigam">
+        <addColumn tableName="property_comps_filter">
+            <column name="subject_address_semantics_id" type="int unsigned">
+                <constraints foreignKeyName="address_semantics-fk" referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="area_filter_used" type="longtext"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-comp-analysis-cache-tables" author="gideon">
+        <createTable tableName="comps_cache_arv_as_is">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="arv_value" type="decimal(14,2)"/>
+            <column name="as_is_value" type="decimal(14,2)"/>
+            <column name="recorded" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="subject_semantics_id" type="int unsigned">
+                <constraints foreignKeyName="comps_cache_arv_as_is-subject_semantics_id-fk"
+                             referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_ntreis_id" type="int">
+                <constraints foreignKeyName="comps_cache_arv_as_is-subject_ntreis_id-fk"
+                             referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_tax_id" type="int">
+                <constraints foreignKeyName="comps_cache_arv_as_is-subject_tax_id-fk"
+                             referencedTableName="onboard_informatics_response" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_auction_id" type="int">
+                <constraints foreignKeyName="comps_cache_arv_as_is-subject_auction_id-fk"
+                             referencedTableName="auctions" referencedColumnNames="id"/>
+            </column>
+            <column name="filter" type="longtext"/>
+            <column name="sold_count" type="smallint"/>
+            <column name="comp_ids" type="text"/>
+            <column name="selected_comp_ids" type="text"/>
+            <column name="excluded_comp_ids" type="text"/>
+        </createTable>
+        <createTable tableName="comps_cache_wholesale">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="wholesale_value" type="decimal(14,2)"/>
+            <column name="recorded" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="subject_semantics_id" type="int unsigned">
+                <constraints foreignKeyName="comps_cache_wholesale-subject_semantics_id-fk"
+                             referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_ntreis_id" type="int">
+                <constraints foreignKeyName="comps_cache_wholesale-subject_ntreis_id-fk"
+                             referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_tax_id" type="int">
+                <constraints foreignKeyName="comps_cache_wholesale-subject_tax_id-fk"
+                             referencedTableName="onboard_informatics_response" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_auction_id" type="int">
+                <constraints foreignKeyName="comps_cache_wholesale-subject_auction_id-fk"
+                             referencedTableName="auctions" referencedColumnNames="id"/>
+            </column>
+            <column name="filter" type="longtext"/>
+            <column name="comp_ids" type="text"/>
+            <column name="selected_comp_ids" type="text"/>
+        </createTable>
+        <createTable tableName="comps_cache_rents">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="rent_high_value" type="decimal(8,2)"/>
+            <column name="rent_low_value" type="decimal(8,2)"/>
+            <column name="rent_average_value" type="decimal(8,2)"/>
+            <column name="recorded" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="subject_semantics_id" type="int unsigned">
+                <constraints foreignKeyName="comps_cache_arv_as_id-subject_semantics_id-fk"
+                             referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_ntreis_id" type="int">
+                <constraints foreignKeyName="comps_cache_rents-subject_ntreis_id-fk"
+                             referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_tax_id" type="int">
+                <constraints foreignKeyName="comps_cache_rents-subject_tax_id-fk"
+                             referencedTableName="onboard_informatics_response" referencedColumnNames="id"/>
+            </column>
+            <column name="subject_auction_id" type="int">
+                <constraints foreignKeyName="comps_cache_rents-subject_auction_id-fk"
+                             referencedTableName="auctions" referencedColumnNames="id"/>
+            </column>
+            <column name="filter" type="longtext"/>
+            <column name="comp_ids" type="text"/>
+            <column name="high_comp_id" type="int"/>
+            <column name="low_comp_id" type="int"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-geo_rooftop-table" author="gideon">
+        <createTable tableName="geo_rooftop">
+            <column name="id" type="int(11) unsigned" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="semantics_id" type="int(11) unsigned">
+                <constraints foreignKeyName="geo_rooftop-semantics_id-fk"
+                             referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="latitude" type="decimal(10,6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="longitude" type="decimal(10,6)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-geo_rooftop-unique-semantics_id" author="gideon">
+        <addUniqueConstraint tableName="geo_rooftop" columnNames="semantics_id" constraintName="semantics_id-uk"/>
+    </changeSet>
+
+    <changeSet id="add-zillow_property-table" author="gideon">
+        <createTable tableName="zillow_property">
+            <column name="id" type="int(11) unsigned" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="semantics_id" type="int(11) unsigned">
+                <constraints foreignKeyName="zillow_property-semantics_id-fk"
+                             referencedTableName="address_semantics" referencedColumnNames="id"/>
+            </column>
+            <column name="zillow_id" type="int"/>
+            <column name="fips" type="varchar(8)"/>
+            <column name="type" type="varchar(32)"/>
+            <column name="tax_year" type="int"/>
+            <column name="tax_assessment" type="decimal(10,6)"/>
+            <column name="year_built" type="int"/>
+            <column name="lot_footage" type="int"/>
+            <column name="finished_footage" type="int"/>
+            <column name="bedrooms" type="int"/>
+            <column name="bathrooms" type="decimal(3,1)"/>
+            <column name="total_rooms" type="int"/>
+            <column name="link_details" type="tinytext"/>
+            <column name="link_graphs" type="tinytext"/>
+            <column name="link_map" type="tinytext"/>
+            <column name="link_comps" type="tinytext"/>
+            <column name="first_line" type="varchar(64)"/>
+            <column name="zip_code" type="varchar(10)"/>
+            <column name="city" type="varchar(24)"/>
+            <column name="state" type="varchar(8)"/>
+            <column name="latitude" type="decimal(10,6)"/>
+            <column name="longitude" type="decimal(10,6)"/>
+            <column name="zestimate" type="decimal(11,2)"/>
+            <column name="zestimate_low" type="decimal(11,2)"/>
+            <column name="zestimate_high" type="decimal(11,2)"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+    
+    <changeSet id="update-zillow_property-decimals" author="gideon">
+        <modifyDataType columnName="tax_assessment" newDataType="decimal(11,2)" tableName="zillow_property"/>
+    </changeSet>
+
+    <changeSet id="add-profiling_metrics-table" author="gideon">
+        <createTable tableName="profiling_metrics">
+            <column name="id" type="int(11) unsigned" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="label" type="varchar(128)">
+                <constraints unique="true"/>
+            </column>
+            <column name="counter" type="int"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-address-standardization-tables" author="gideon">
+        <createTable tableName="standard_street_suffix">
+            <column name="id" type="int(11) unsigned" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="key" type="varchar(32)">
+                <constraints unique="true"/>
+            </column>
+            <column name="value" type="varchar(2)"/>
+        </createTable>
+        <createTable tableName="standard_state_abbr">
+            <column name="id" type="int(11) unsigned" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="key" type="varchar(32)">
+                <constraints unique="true"/>
+            </column>
+            <column name="value" type="varchar(2)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="update-street_suffix-value-datatype" author="gideon">
+        <modifyDataType columnName="value" newDataType="varchar(8)" tableName="standard_street_suffix"/>
+    </changeSet>
+
+    <changeSet id="index-ntreis-searched-columns" author="gideon">
+        <createIndex tableName="ntreis" indexName="DOM_INDEX" unique="false">
+            <column name="DOM" type="int"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="CDOM_INDEX" unique="false">
+            <column name="CDOM" type="int"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="PostalCode_INDEX" unique="false">
+            <column name="PostalCode" type="varchar(10)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="CountyOrParish_INDEX" unique="false">
+            <column name="CountyOrParish" type="varchar(32)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="City_INDEX" unique="false">
+            <column name="City" type="varchar(80)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="SchoolDistrict_INDEX" unique="false">
+            <column name="SchoolDistrict" type="varchar(66)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="ListPrice_INDEX" unique="false">
+            <column name="ListPrice" type="decimal(10,0)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="SqFtTotal_INDEX" unique="false">
+            <column name="SqFtTotal" type="decimal(10,0)"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="AssociationFee_INDEX" unique="false">
+            <column name="AssociationFee" type="int"/>
+        </createIndex>
+        <createIndex tableName="ntreis" indexName="NumberOfStories_INDEX" unique="false">
+            <column name="NumberOfStories" type="decimal(4,1)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-trestle-photo-tables" author="gideon">
+        <createTable tableName="trestle_front_photo">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="listing_key" type="int(11)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="trestle_url" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="s3_url" type="varchar(256)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+        <createTable tableName="trestle_photo">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="listing_key" type="int(11)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="trestle_url" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="s3_url" type="varchar(256)">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="index-trestle_photo-listing-key" author="gideon">
+        <createIndex tableName="trestle_photo" indexName="listing_key_INDEX" unique="false">
+            <column name="listing_key" type="int(11)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-address_semantics-trestle-fields" author="gideon">
+        <addColumn tableName="address_semantics">
+            <column name="trestle_system" type="enum('HAR')"/>
+            <column name="trestle_id" type="int"/>
+        </addColumn>
+        <createIndex tableName="address_semantics" indexName="address_semantics-trestle_system-index" unique="false">
+            <column name="trestle_system" type="enum('HAR')"/>
+        </createIndex>
+        <createIndex tableName="address_semantics" indexName="address_semantics-trestle_id-index" unique="false">
+            <column name="trestle_id" type="int(11)"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

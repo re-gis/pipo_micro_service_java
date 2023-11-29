@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+   http://www.liquibase.org/xml/ns/dbchangelog
+   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
+
+    <changeSet id="add-ntreis_photo" author="gnandigam">
+        <createTable tableName="ntreis_photo">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="s3_url" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ntreis_id" type="int(10) unsigned" >
+                <constraints nullable="false" foreignKeyName="ntreis_photo-ntreis-fk" referencedColumnNames="id" referencedTableName="ntreis"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-mls_status" author="gnandigam">
+        <createTable tableName="mls_status">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-mls_city" author="gnandigam">
+        <createTable tableName="mls_city">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-mls_county" author="gnandigam">
+        <createTable tableName="mls_county">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-mls_property_sub_type" author="gnandigam">
+        <createTable tableName="mls_property_sub_type">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-mls_school_district" author="gnandigam">
+        <createTable tableName="mls_school_district">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-invalid-flag-to-mls_county" author="gnandigam">
+        <addColumn tableName="mls_county">
+            <column name="invalid" defaultValue="false" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-invalid-flag-to-mls_status" author="gnandigam">
+        <addColumn tableName="mls_status">
+            <column name="invalid" defaultValue="false" type="boolean"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-zip_code-table" author="gnandigam">
+        <createTable tableName="zip_code">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="int(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="county_id" type="int(11)" >
+                <constraints nullable="true" foreignKeyName="mls_county-county_id-fk" referencedColumnNames="id" referencedTableName="mls_county"/>
+            </column>
+            <column name="city_id" type="int(11)" >
+                <constraints nullable="true" foreignKeyName="mls_city-city_id-fk" referencedColumnNames="id" referencedTableName="mls_city"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-type-to-zip_code" author="gnandigam">
+        <addColumn tableName="zip_code">
+            <column name="type" type="varchar(10)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-mls_property_type" author="gnandigam">
+        <createTable tableName="mls_property_type">
+            <column name="id" type="int(11)" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="value" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="retsShortValue" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="change-primary_number-type" author="gnandigam">
+        <modifyDataType tableName="address_semantics" columnName="primary_number" newDataType="varchar(12)"/>
+    </changeSet>
+
+    <changeSet id="add-rets-metadata-table" author="gnandigam">
+        <createTable tableName="rets_metadata">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(256)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="value" type="longtext"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-default_comp-table" author="gnandigam">
+        <createTable tableName="default_comp">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="subject_id" type="int">
+                <constraints foreignKeyName="default_comp-subject_id-fk" referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+            <column name="comp_id" type="int">
+                <constraints foreignKeyName="default_comp-comp_id-fk" referencedTableName="ntreis" referencedColumnNames="id"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-property_comps_filter-table" author="gnandigam">
+        <createTable tableName="property_comps_filter">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="arv_filter_used" type="longtext"/>
+            <column name="rental_filter_used" type="longtext"/>
+            <column name="created" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+            <column name="updated" type="timestamp" defaultValueComputed="CURRENT_TIMESTAMP"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-ntreis_id-property_comps_filter" author="gnandigam">
+        <addColumn tableName="property_comps_filter">
+            <column name="ntreis_id" type="int" >
+                <constraints nullable="false" foreignKeyName="property_comps_filter-ntreis-fk" referencedColumnNames="id" referencedTableName="ntreis"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="add-property_comp-table" author="gnandigam">
+        <createTable tableName="property_comp">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="property_comps_filter_id" type="int" >
+                <constraints nullable="false" foreignKeyName="property_comps_filter-fk" referencedColumnNames="id" referencedTableName="property_comps_filter"/>
+            </column>
+            <column name="ntreis_id" type="int" >
+                <constraints nullable="false" foreignKeyName="property_comp-ntreis-fk" referencedColumnNames="id" referencedTableName="ntreis"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-type-property_comp" author="gnandigam">
+        <addColumn tableName="property_comp">
+            <column name="type" type="varchar(12)"></column>
+        </addColumn>
+        <renameColumn tableName="property_comp" oldColumnName="ntreis_id" newColumnName="comp_id" columnDataType="int"/>
+        <renameColumn tableName="property_comps_filter" oldColumnName="ntreis_id" newColumnName="subject_id" columnDataType="int"/>
+    </changeSet>
+
+    <changeSet id="rename-to-lease_filter_used" author="gnandigam">
+        <renameColumn tableName="property_comps_filter" oldColumnName="rental_filter_used" newColumnName="lease_filter_used" columnDataType="longtext"/>
+    </changeSet>
+
+    <changeSet id="rename-zip_code-type-column" author="gideon">
+        <renameColumn tableName="zip_code" oldColumnName="type" newColumnName="location_type" columnDataType="varchar(10)"/>
+    </changeSet>
+</databaseChangeLog>

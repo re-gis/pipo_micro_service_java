@@ -1,0 +1,23 @@
+# hit-api and hit-cron build and deploy pipeline
+
+image: maven:3.6.3-openjdk-8
+
+pipelines:
+  branches:
+    master:
+      - step:
+          name: Build Maven
+          caches:
+            - maven
+          script:
+            - MVN_VERSION=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+            - echo $MVN_VERSION
+            - mvn clean package -DskipTests
+          artifacts:
+            - bippo-api/target/bippo-api-2.0.0.jar
+            - bippo-dag-cron/target/bippo-dag-cron-2.0.0.jar
+            - bippo-dag-rets/target/bippo-dag-rets-2.0.0.jar
+            - bippo-data-aggregator/target/bippo-data-aggregator-2.0.0.jar
+            
+
+            

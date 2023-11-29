@@ -1,0 +1,10 @@
+**/target/
+*.iml
+.idea
+.mvn
+**/.vagrant
+**/catalina.base_IS_UNDEFINED/
+**/.DS_Store
+.classpath
+.project
+/bin/
